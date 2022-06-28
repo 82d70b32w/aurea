@@ -1,0 +1,10 @@
+CC=gcc
+CXX=g++
+CFLAGS=
+CXXFLAGS=
+LDFLAGS=
+CPU_TYPE=x86-64
+CPU_TARGET=x86-64
+BUILD_TYPE=Release
+
+packages=(pcre2 freetype2 sdl2 lua)

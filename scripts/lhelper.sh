@@ -50,26 +50,27 @@ main() {
     mkdir -p "${lhelper_prefix}/bin"
     pushd lhelper; bash install "${lhelper_prefix}"; popd
 
+    # Note (Francesco) the new lhelper 2.0 obliges us to give here the
+    # architecture explicitly. Ideally lhelper should have a mechanism
+    # so that it automatically adapts to any CPU architecture.
     if [[ "$OSTYPE" == "darwin"* ]]; then
-      CC=clang CXX=clang++ lhelper create lite-xl -n
+      CC=clang CXX=clang++ lhelper create build-x86-64
     else
-      lhelper create lite-xl -n
+      lhelper create lite-xl build-x86-64
     fi
   fi
 
   # Not using $(lhelper activate lite-xl) to support CI
-  source "$(lhelper env-source lite-xl)"
-
-  lhelper install freetype2
-  lhelper install sdl2 2.0.14-wait-event-timeout-1
-  lhelper install pcre2
+  source "$(lhelper env-source build-x86-64)"
 
   # Help MSYS2 to find the SDL2 include and lib directories to avoid errors
   # during build and linking when using lhelper.
-  if [[ "$OSTYPE" == "msys" ]]; then
-    CFLAGS=-I${LHELPER_ENV_PREFIX}/include/SDL2
-    LDFLAGS=-L${LHELPER_ENV_PREFIX}/lib
-  fi
+  # Francesco: not sure why this is needed. I have never observed the problem when
+  #            building on window.
+  # if [[ "$OSTYPE" == "msys" ]]; then
+  #   CFLAGS=-I${LHELPER_ENV_PREFIX}/include/SDL2
+  #   LDFLAGS=-L${LHELPER_ENV_PREFIX}/lib
+  # fi
 }
 
 main "$@"
